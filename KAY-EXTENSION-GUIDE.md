@@ -502,39 +502,62 @@ If the documentation isn't clear on something, your Claude Code can **query KAY 
 
 ### Query System Setup
 
-**Option 1: MCP Tool (Recommended)**
+**Your Claude Code will have direct access to Oscar's live KAY system via MCP tool.**
 
-KAY has an MCP tool you can call:
+This provides:
+- RAG search through Oscar's documentation in his database
+- Live queries of Oscar's running system (sync status, tasks, files, etc.)
+- Oscar's actual configuration (cron schedules, integrations)
+- Access to Oscar's MEMORY learnings
 
-```typescript
-// In your Claude Code environment
-// After setting up MCP connection to KAY's Railway API
+**📋 Setup Instructions:** See `KAY-QUERY-SETUP.md` for complete setup guide.
 
-const response = await mcp.call('kay-query', {
-  question: 'How does the Notion conflict resolution work when both sides edited at the same time?',
-  context: 'I\'m implementing notion sync and the docs mention last-write-wins but I need more detail'
-});
+**Quick Overview:**
+
+1. **Oscar creates read-only database user** (one-time setup)
+2. **Oscar shares connection string with you**
+3. **You configure your Claude Code** with the MCP tool:
+
+```json
+// ~/.config/Claude/claude_desktop_config.json
+{
+  "mcpServers": {
+    "kay-query": {
+      "command": "bun",
+      "args": ["run", "/home/YOUR_USERNAME/.claude/tools/mcp/kay-query-direct.ts"],
+      "env": {
+        "DATABASE_URL": "postgresql://readonly_user:PASSWORD@...neon.tech/neondb",
+        "OPENAI_API_KEY": "sk-proj-..."
+      }
+    }
+  }
+}
 ```
 
-**Option 2: API Endpoint**
-
+4. **Copy the MCP tool file** from the pai-extension-guide repo:
 ```bash
-curl -X POST https://kay-pai-api.railway.app/query \
-  -H "Content-Type: application/json" \
-  -d '{
-    "question": "Your question here",
-    "context": "What you'\''re trying to do"
-  }'
+cp ~/reference/pai-blueprints/pai-extension-guide/mcp/kay-query-direct.ts \
+   ~/.claude/tools/mcp/
 ```
 
-**Option 3: Shared Context File (Fallback)**
+5. **Restart Claude Code** to load the tool
 
-If API not available, create a shared context file:
+**Available Tools:**
 
-1. Your Claude Code writes question to: `/shared/questions-for-kay.md`
-2. KAY monitors this file (cron every hour)
-3. KAY writes answer to: `/shared/answers-from-kay.md`
-4. Your Claude Code reads answer
+- **`search_kay_docs`** - Search Oscar's documentation using RAG
+- **`query_kay_system`** - Get live data from Oscar's system (10+ entities)
+- **`get_kay_config`** - Get Oscar's actual configuration (5 components)
+- **`search_kay_memory`** - Search Oscar's accumulated learnings
+
+**Example Usage:**
+
+```
+Use kay-query tools to:
+- Search for "Notion conflict resolution" in KAY's docs
+- Show me a sample task from KAY's database
+- Get KAY's cron schedule
+- What's KAY's sync health for the last 7 days?
+```
 
 ### What to Query KAY About
 
