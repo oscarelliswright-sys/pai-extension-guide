@@ -2,10 +2,15 @@
 /**
  * KAY Query MCP Tool - Direct Database Access
  *
- * For trusted users (like Oscar's dad) with read-only access to KAY's database.
- * Provides full visibility into KAY's live system.
+ * For trusted users (like Oscar's dad) building their own PAI.
+ * Provides read-only access to Oscar's live system for guidance.
  *
- * Setup for your dad's claude_desktop_config.json:
+ * Tools:
+ * 1. query_kay_system - 10 live queries (syncs, tasks, files, stats, etc.)
+ * 2. get_kay_config - 5 config queries (cron, sync, integrations, etc.)
+ * 3. get_memory_topics - List available MEMORY topics
+ *
+ * Setup for claude_desktop_config.json:
  * {
  *   "mcpServers": {
  *     "kay-query": {
@@ -17,6 +22,8 @@
  *     }
  *   }
  * }
+ *
+ * Note: No OpenAI API key needed - removed RAG search (dad has docs from GitHub)
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -44,39 +51,7 @@ const server = new Server(
   }
 );
 
-/**
- * Tool 1: Search KAY's Documentation
- * Uses RAG to search through KAY's documentation in the database
- */
-async function searchDocumentation(question: string, category?: string) {
-  // Search documentation files using vector similarity
-  const results = await sql`
-    SELECT
-      f.file_name,
-      f.file_path,
-      c.content,
-      c.heading_path,
-      c.embedding <=> ${await getQueryEmbedding(question)} as distance
-    FROM file_chunks c
-    JOIN files f ON c.file_id = f.id
-    WHERE f.file_path LIKE '%pai-documentation%'
-      AND c.embedding IS NOT NULL
-    ORDER BY distance ASC
-    LIMIT 10
-  `;
-
-  return {
-    success: true,
-    results: results.map(r => ({
-      file: r.file_name,
-      path: r.file_path,
-      section: r.heading_path,
-      content: r.content,
-      relevance: (1 - r.distance).toFixed(2)
-    })),
-    note: "These are excerpts from KAY's actual documentation stored in the database"
-  };
-}
+// Note: search_kay_docs tool removed - dad has the docs from GitHub already!
 
 /**
  * Tool 2: Query KAY's Live System State
@@ -415,12 +390,10 @@ async function getConfiguration(component: string) {
 }
 
 /**
- * Tool 4: Search KAY's MEMORY (Learnings)
- * Access Oscar's accumulated knowledge
+ * Tool 3: Get KAY's MEMORY Topics
+ * Show what learning topics are available
  */
-async function searchMemory(topic?: string) {
-  // This would search through Oscar's MEMORY/ directory
-  // For now, return structure info
+async function getMemoryTopics() {
   return {
     description: "KAY's MEMORY structure",
     learnings_topics: [
@@ -431,65 +404,16 @@ async function searchMemory(topic?: string) {
       "PAI"
     ],
     note: "These are Oscar's accumulated learnings from previous sessions",
-    suggestion: "Check ~/.claude/MEMORY/learnings/ for specific topics"
+    suggestion: "The raw markdown files are at: ~/reference/pai-blueprints/pai-extension-guide/ - your Claude Code can read them directly"
   };
 }
 
-/**
- * Helper: Generate query embedding
- */
-async function getQueryEmbedding(text: string): Promise<number[]> {
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
-  if (!OPENAI_API_KEY) {
-    console.warn('OPENAI_API_KEY not set, using zero vector (results will be random)');
-    return Array(1536).fill(0);
-  }
-
-  try {
-    const response = await fetch('https://api.openai.com/v1/embeddings', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'text-embedding-3-small',
-        input: text
-      })
-    });
-
-    const data = await response.json();
-    return data.data[0].embedding;
-  } catch (error: any) {
-    console.error('Failed to generate embedding:', error.message);
-    return Array(1536).fill(0);
-  }
-}
+// OpenAI embeddings not needed - removed search_kay_docs tool
 
 // Register tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
-      {
-        name: 'search_kay_docs',
-        description: 'Search through KAY\'s actual documentation stored in the database using RAG. Returns relevant sections from Oscar\'s documentation.',
-        inputSchema: {
-          type: 'object',
-          properties: {
-            question: {
-              type: 'string',
-              description: 'Your question about KAY\'s documentation'
-            },
-            category: {
-              type: 'string',
-              enum: ['setup', 'capabilities', 'usage', 'development', 'operations', 'reference'],
-              description: 'Optional: Focus search on specific documentation category'
-            }
-          },
-          required: ['question']
-        }
-      },
       {
         name: 'query_kay_system',
         description: 'Query KAY\'s live system state. Get actual data from Oscar\'s running PAI - sync runs, tasks, files, Telegram usage, database stats, etc.',
@@ -538,16 +462,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         }
       },
       {
-        name: 'search_kay_memory',
-        description: 'Search KAY\'s MEMORY system - Oscar\'s accumulated learnings and context from previous sessions.',
+        name: 'get_memory_topics',
+        description: 'Get list of MEMORY topics available. The actual learnings are in the GitHub repo markdown files that your Claude Code can read directly.',
         inputSchema: {
           type: 'object',
-          properties: {
-            topic: {
-              type: 'string',
-              description: 'Topic to search for (e.g., "Notion sync", "file processing")'
-            }
-          }
+          properties: {}
         }
       }
     ]
@@ -562,10 +481,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     let result;
 
     switch (name) {
-      case 'search_kay_docs':
-        result = await searchDocumentation(args.question as string, args.category as string);
-        break;
-
       case 'query_kay_system':
         result = await querySystemState(args.entity as string);
         break;
@@ -574,8 +489,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         result = await getConfiguration(args.component as string);
         break;
 
-      case 'search_kay_memory':
-        result = await searchMemory(args.topic as string);
+      case 'get_memory_topics':
+        result = await getMemoryTopics();
         break;
 
       default:
