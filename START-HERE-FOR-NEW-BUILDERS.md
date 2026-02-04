@@ -15,6 +15,35 @@ This video explains the WHY and WHAT of Personal AI Infrastructure better than a
 
 ---
 
+## 🔑 IMPORTANT: You Have Access to Oscar's Live System
+
+**Your Claude Code has MCP tools to query Oscar's actual running KAY system.**
+
+You can ask me to:
+- Search Oscar's documentation in his database (RAG search)
+- Query Oscar's live system state (sync runs, tasks, files, etc.)
+- Get Oscar's actual configuration (cron schedules, integrations)
+- Search Oscar's MEMORY learnings
+
+**Use these tools liberally throughout the build process when:**
+- Documentation is unclear or ambiguous
+- You need to see real examples from Oscar's system
+- You want to verify how something actually works
+- You're stuck and need clarification
+
+**Example queries you can use:**
+```
+Use kay-query tools to:
+- Search for "Notion sync conflict resolution" in KAY's docs
+- Show me a real task from KAY's database with all sync fields
+- What's KAY's cron schedule?
+- Get KAY's file processing pipeline configuration
+```
+
+**Setup instructions:** See `KAY-QUERY-SETUP.md` for complete setup (your user should have already configured this).
+
+---
+
 ## 📋 What is Personal AI Infrastructure (PAI)?
 
 Personal AI Infrastructure is a system that acts as your **second brain** - it remembers everything, automates routine tasks, and provides instant access to your information through natural conversation.

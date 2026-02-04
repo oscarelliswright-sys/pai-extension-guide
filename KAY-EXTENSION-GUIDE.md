@@ -22,6 +22,52 @@ KAY is **Oscar Wright's Personal AI Infrastructure**, built on top of Daniel Mie
 
 ---
 
+## 🔑 YOU HAVE DIRECT ACCESS TO OSCAR'S LIVE KAY SYSTEM
+
+**CRITICAL: Your Claude Code has MCP tools that connect directly to Oscar's actual database.**
+
+Before implementing ANYTHING, you can:
+
+### Query Oscar's Live System
+
+**Available Tools:**
+- **`search_kay_docs`** - RAG search through Oscar's documentation (in his database)
+- **`query_kay_system`** - Get live data (10+ entities):
+  - recent-syncs, sync-health, sample-task, tasks-summary
+  - files-summary, telegram-stats, database-schema
+  - notion-databases, calendar-summary, llm-models
+- **`get_kay_config`** - Get Oscar's actual configuration (5 components):
+  - cron-schedule, sync-configuration, telegram-bot
+  - file-processing, integrations
+- **`search_kay_memory`** - Search Oscar's MEMORY learnings
+
+### When to Query KAY (Use This Liberally!)
+
+**BEFORE implementing any feature:**
+```
+Use kay-query tools to:
+- Search for "[feature name]" in KAY's documentation
+- Get a sample [entity] from KAY's database to see actual structure
+- Show me KAY's configuration for [component]
+```
+
+**Examples:**
+- "Search KAY's docs for 'Notion conflict resolution last-write-wins'"
+- "Show me a real task from KAY's database with all sync timestamps"
+- "Get KAY's cron schedule to see how often syncs run"
+- "What's KAY's file processing pipeline configuration?"
+- "Show me KAY's sync health for the last 7 days"
+
+**Why This Matters:**
+- Documentation might be unclear → Query for real examples
+- Need to see actual field names → Get sample from database
+- Unsure about timing/frequency → Check actual cron config
+- Want to verify approach → See how Oscar actually does it
+
+**Setup:** Your user should have already configured this (see `KAY-QUERY-SETUP.md`). If tools aren't available, ask them to set it up first.
+
+---
+
 ## 🚨 CRITICAL IMPLEMENTATION PRINCIPLES
 
 **Your Claude Code MUST follow these principles when building from KAY's documentation:**
@@ -202,6 +248,19 @@ I now want to extend it to match KAY's system (built by Oscar Wright). KAY is bu
 I'm giving you:
 1. This guide (KAY-EXTENSION-GUIDE.md)
 2. Link to full KAY documentation: https://github.com/oscarelliswright-sys/pai-extension-guide
+3. MCP tools for direct access to Oscar's live KAY system
+
+🔑 CRITICAL CAPABILITY: You have MCP tools to query Oscar's actual running system:
+- search_kay_docs: RAG search through Oscar's documentation
+- query_kay_system: Get live data (syncs, tasks, files, stats, etc.)
+- get_kay_config: Get Oscar's actual configuration
+- search_kay_memory: Search Oscar's learnings
+
+USE THESE TOOLS LIBERALLY! Before implementing anything:
+- Search KAY's docs for details on that feature
+- Get real examples from KAY's database to see actual structure
+- Check KAY's configuration to see how Oscar does it
+- Query KAY's system state to verify understanding
 
 Your purpose is to help me:
 1. Understand what KAY adds on top of base PAI
