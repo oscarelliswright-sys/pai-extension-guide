@@ -52,15 +52,14 @@ async function searchDocumentation(question: string, category?: string) {
   // Search documentation files using vector similarity
   const results = await sql`
     SELECT
-      f.filename,
+      f.file_name,
       f.file_path,
-      f.folder,
-      c.chunk_text,
+      c.content,
       c.heading_path,
       c.embedding <=> ${await getQueryEmbedding(question)} as distance
     FROM file_chunks c
     JOIN files f ON c.file_id = f.id
-    WHERE f.folder LIKE '%pai-documentation%'
+    WHERE f.file_path LIKE '%pai-documentation%'
       AND c.embedding IS NOT NULL
     ORDER BY distance ASC
     LIMIT 10
@@ -69,10 +68,10 @@ async function searchDocumentation(question: string, category?: string) {
   return {
     success: true,
     results: results.map(r => ({
-      file: r.filename,
+      file: r.file_name,
       path: r.file_path,
       section: r.heading_path,
-      content: r.chunk_text,
+      content: r.content,
       relevance: (1 - r.distance).toFixed(2)
     })),
     note: "These are excerpts from KAY's actual documentation stored in the database"
@@ -136,17 +135,17 @@ async function querySystemState(entity: string, filters?: any) {
     'sample-task': async () => {
       const task = await sql`
         SELECT
-          title,
+          name,
           status,
           priority,
-          due_date,
+          due_at,
           notion_page_id,
           sql_local_last_edited_at,
-          notion_last_edited_time,
-          created_at
+          notion_last_edited_at,
+          sql_updated_at
         FROM tasks
         WHERE deleted_at IS NULL
-        ORDER BY created_at DESC
+        ORDER BY sql_updated_at DESC
         LIMIT 1
       `;
       return {
@@ -183,7 +182,7 @@ async function querySystemState(entity: string, filters?: any) {
           COUNT(*) FILTER (WHERE embedding IS NOT NULL) as embedded,
           AVG(classification_confidence)::numeric(3,2) as avg_confidence
         FROM files
-        WHERE classified_at IS NOT NULL
+        WHERE suggested_para_type IS NOT NULL
         GROUP BY suggested_para_type
         ORDER BY count DESC
       `;

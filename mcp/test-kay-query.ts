@@ -77,14 +77,14 @@ try {
   // Sample task
   console.log('Query: Sample Task');
   const tasks = await sql`
-    SELECT title, status, priority, notion_page_id
+    SELECT name, status, priority, notion_page_id
     FROM tasks
     WHERE deleted_at IS NULL
-    ORDER BY created_at DESC
+    ORDER BY sql_updated_at DESC
     LIMIT 1
   `;
   if (tasks.length > 0) {
-    console.log(`✅ Retrieved task: "${tasks[0].title}"`);
+    console.log(`✅ Retrieved task: "${tasks[0].name}"`);
     console.log(`   Status: ${tasks[0].status}, Priority: ${tasks[0].priority}`);
   } else {
     console.log('⚠️  No tasks found');
@@ -98,7 +98,7 @@ try {
       suggested_para_type,
       COUNT(*) as count
     FROM files
-    WHERE classified_at IS NOT NULL
+    WHERE suggested_para_type IS NOT NULL
     GROUP BY suggested_para_type
     ORDER BY count DESC
   `;
@@ -122,12 +122,12 @@ try {
     const zeroVector = Array(1536).fill(0);
     const searchResults = await sql`
       SELECT
-        f.filename,
-        c.chunk_text,
+        f.file_name,
+        c.content,
         c.embedding <=> ${zeroVector}::vector as distance
       FROM file_chunks c
       JOIN files f ON c.file_id = f.id
-      WHERE f.folder LIKE '%pai-documentation%'
+      WHERE f.file_path LIKE '%pai-documentation%'
         AND c.embedding IS NOT NULL
       ORDER BY distance ASC
       LIMIT 3
