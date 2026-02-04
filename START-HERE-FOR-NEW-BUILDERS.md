@@ -403,11 +403,45 @@ Let's begin with step 1.
 - Install required packs + any additional packs you want
 - This creates the foundation
 
-**Phase 3: Extend to KAY's Features**
-- Read `KAY-EXTENSION-GUIDE.md`
-- Use full documentation at: https://github.com/oscarelliswright-sys/pai-extension-guide
-- Claude Code systematically replicates KAY's features
+**Phase 3: Get KAY Documentation**
+
+**Clone documentation to a separate reference directory:**
+
+```bash
+# Create dedicated reference directory (separate from your PAI implementation)
+mkdir -p ~/reference/pai-blueprints
+
+# Clone KAY documentation
+cd ~/reference/pai-blueprints
+git clone https://github.com/oscarelliswright-sys/pai-extension-guide.git
+
+# Result: ~/reference/pai-blueprints/pai-extension-guide/
+```
+
+**Important: Keep documentation separate from your implementation**
+- Your actual PAI code lives in: `~/.claude/`
+- KAY documentation lives in: `~/reference/pai-blueprints/pai-extension-guide/`
+- This prevents confusion between "the blueprint" and "your system"
+
+**Tell your Claude Code:**
+```
+The KAY documentation is at ~/reference/pai-blueprints/pai-extension-guide/
+Read it as a reference guide, but implement MY system in ~/.claude/
+Keep them completely separate.
+```
+
+**Then follow KAY-EXTENSION-GUIDE.md:**
+- Read `~/reference/pai-blueprints/pai-extension-guide/KAY-EXTENSION-GUIDE.md`
+- Give Claude Code the prompt from that document
+- Claude Code reads the full documentation
+- Systematically replicates KAY's features in YOUR `~/.claude/` directory
 - You make decisions where you want to deviate
+
+**To update documentation later:**
+```bash
+cd ~/reference/pai-blueprints/pai-extension-guide
+git pull
+```
 
 **Phase 4: Customize and Use**
 - Add your own features
@@ -474,7 +508,8 @@ A: Your PAI can query KAY (Oscar's system) for help. See Phase 4 setup.
 **Once infrastructure is ready:**
 - Install Claude Code on your new infrastructure
 - Proceed to Phase 2: Daniel Miessler's base PAI installation
-- Then Phase 3: Extend to KAY's features
+- Clone KAY documentation to `~/reference/pai-blueprints/` (see Phase 3 above)
+- Then Phase 3: Use KAY-EXTENSION-GUIDE.md to extend to KAY's features
 
 ---
 
