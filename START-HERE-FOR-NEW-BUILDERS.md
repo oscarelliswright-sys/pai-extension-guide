@@ -405,17 +405,25 @@ Let's begin with step 1.
 
 **Phase 3: Get KAY Documentation**
 
-**Clone documentation to a separate reference directory:**
+**Tell your Claude Code to get the documentation:**
 
+```
+Please clone the KAY documentation to a separate reference directory:
+
+1. Create directory: ~/reference/pai-blueprints/
+2. Clone: https://github.com/oscarelliswright-sys/pai-extension-guide.git
+3. This should be SEPARATE from my PAI implementation in ~/.claude/
+
+After cloning, confirm the documentation is at:
+~/reference/pai-blueprints/pai-extension-guide/
+```
+
+**Your Claude Code will:**
 ```bash
-# Create dedicated reference directory (separate from your PAI implementation)
 mkdir -p ~/reference/pai-blueprints
-
-# Clone KAY documentation
 cd ~/reference/pai-blueprints
 git clone https://github.com/oscarelliswright-sys/pai-extension-guide.git
-
-# Result: ~/reference/pai-blueprints/pai-extension-guide/
+# ✅ Documentation cloned to ~/reference/pai-blueprints/pai-extension-guide/
 ```
 
 **Important: Keep documentation separate from your implementation**
@@ -423,24 +431,20 @@ git clone https://github.com/oscarelliswright-sys/pai-extension-guide.git
 - KAY documentation lives in: `~/reference/pai-blueprints/pai-extension-guide/`
 - This prevents confusion between "the blueprint" and "your system"
 
-**Tell your Claude Code:**
-```
-The KAY documentation is at ~/reference/pai-blueprints/pai-extension-guide/
-Read it as a reference guide, but implement MY system in ~/.claude/
-Keep them completely separate.
-```
+**Then give Claude Code the extension prompt:**
 
-**Then follow KAY-EXTENSION-GUIDE.md:**
-- Read `~/reference/pai-blueprints/pai-extension-guide/KAY-EXTENSION-GUIDE.md`
-- Give Claude Code the prompt from that document
-- Claude Code reads the full documentation
-- Systematically replicates KAY's features in YOUR `~/.claude/` directory
-- You make decisions where you want to deviate
+Open `~/reference/pai-blueprints/pai-extension-guide/KAY-EXTENSION-GUIDE.md` and copy the prompt from the top of that file. Give it to your Claude Code.
 
-**To update documentation later:**
-```bash
-cd ~/reference/pai-blueprints/pai-extension-guide
-git pull
+**Claude Code will then:**
+- Read the full KAY documentation from `~/reference/pai-blueprints/`
+- Systematically implement features in YOUR `~/.claude/` directory
+- Present you with decision points before implementing each feature
+- Keep the blueprint and your implementation completely separate
+
+**To update documentation later, tell Claude Code:**
+```
+Please update the KAY documentation:
+cd ~/reference/pai-blueprints/pai-extension-guide && git pull
 ```
 
 **Phase 4: Customize and Use**
