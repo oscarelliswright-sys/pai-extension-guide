@@ -266,12 +266,35 @@ Read the documentation to understand what PAI can do:
 
 ---
 
-## Next Steps
+## Building Your Own PAI
 
-Ready to build your own PAI?
+Want to replicate this system? You have two paths:
+
+### Path 1: Start from Daniel Miessler's Base PAI (Recommended for New Builders)
+
+1. **Watch:** [Daniel Miessler - Building Your Personal AI Infrastructure](https://www.youtube.com/watch?v=your-video-link) (20 min)
+2. **Install Base PAI:** https://github.com/danielmiessler/Personal_AI_Infrastructure
+3. **Extend to KAY's Features:** [START-HERE-FOR-NEW-BUILDERS.md](START-HERE-FOR-NEW-BUILDERS.md)
+4. **Follow Extension Guide:** [KAY-EXTENSION-GUIDE.md](KAY-EXTENSION-GUIDE.md)
+
+**🔑 Special Feature for New Builders:**
+
+Your Claude Code can query Oscar's live KAY system while you build! This provides:
+- RAG search through Oscar's documentation (in his database)
+- Real examples from Oscar's running system
+- Oscar's actual configuration details
+- Access to Oscar's MEMORY learnings
+
+See [KAY-QUERY-SETUP.md](KAY-QUERY-SETUP.md) for setup instructions.
+
+### Path 2: Clone This Exact Setup
 
 1. **[Read the System Overview](docs/00-overview/system-overview.md)** - Understand how it works
 2. **[Check Prerequisites](docs/01-setup/prerequisites.md)** - Make sure you have what you need
 3. **[Start Setup](docs/01-setup/vps-setup.md)** - Begin with VPS configuration
+
+---
+
+## Next Steps
 
 Questions? Start with the [System Overview](docs/00-overview/system-overview.md) or jump to [Troubleshooting](docs/05-operations/troubleshooting.md).

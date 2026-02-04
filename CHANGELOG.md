@@ -6,6 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.1.0] - 2026-02-04 - KAY Query System for New Builders
+
+### Added
+- **KAY Query MCP Tool** - Direct database access for trusted users building their own PAI
+  - `search_kay_docs` - RAG search through Oscar's documentation in database
+  - `query_kay_system` - 10 live system queries (syncs, tasks, files, stats, etc.)
+  - `get_kay_config` - 5 configuration queries (cron, sync, integrations)
+  - `search_kay_memory` - Search Oscar's MEMORY learnings
+- **Documentation for New Builders**
+  - `START-HERE-FOR-NEW-BUILDERS.md` - Entry point for dad and others
+  - `KAY-EXTENSION-GUIDE.md` - Systematic guide for extending base PAI to KAY
+  - `KAY-QUERY-SETUP.md` - Complete setup instructions for query tools
+- **SQL Script** - `mcp/create-readonly-user.sql` for creating read-only database user
+- **Test Script** - `mcp/test-kay-query.ts` for verifying database connection and permissions
+
+### Changed
+- Updated MCP tools reference to include 4 new query tools (47 total)
+- Updated README.md with two-path approach for new builders
+- Prominently featured query tools in documentation (early awareness)
+
+### Purpose
+Enable Oscar's dad (and future PAI builders) to query Oscar's live system for guidance, real examples, and clarification while building their own PAI.
+
+### Security
+Read-only PostgreSQL user with SELECT-only permissions. Trusted users only.
+
+---
+
 ## [1.0.0] - 2026-02-04 - Production Release
 
 ### System Status

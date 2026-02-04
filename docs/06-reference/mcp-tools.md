@@ -2,13 +2,14 @@
 
 **Purpose:** Complete reference for all PAI MCP tools
 **Available In:** LibreChat, Claude Code (local MCP), Telegram (via API)
-**Total Tools:** 43
+**Total Tools:** 47 (43 operational + 4 KAY Query tools)
 **Last Updated:** February 4, 2026
 
 ---
 
 ## Tool Categories
 
+- [KAY Query Tools](#kay-query-tools-4-tools) (4 tools) - **For new builders only**
 - [Task Management](#task-management-8-tools) (8 tools)
 - [Calendar](#calendar-3-tools) (3 tools)
 - [File & Email Search](#file--email-search-3-tools) (3 tools)
@@ -20,6 +21,185 @@
 - [Notes](#notes-2-tools) (2 tools)
 - [Work Projects](#work-projects-4-tools) (4 tools)
 - [Media & Games](#media--games-6-tools) (6 tools)
+
+---
+
+## KAY Query Tools (4 tools)
+
+**Special Category:** These tools are ONLY for new builders (like Oscar's dad) who are building their own PAI system. They provide direct read-only access to Oscar's live KAY system for guidance.
+
+**Setup:** See [KAY-QUERY-SETUP.md](../../KAY-QUERY-SETUP.md)
+
+---
+
+### search_kay_docs
+
+**Purpose:** RAG search through Oscar's documentation stored in his database
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `question` | string | Yes | Your question about KAY's documentation |
+| `category` | string | No | setup, capabilities, usage, development, operations, reference |
+
+**Example:**
+```json
+{
+  "question": "How does Notion conflict resolution work when both sides edit at the same time?",
+  "category": "capabilities"
+}
+```
+
+**Returns:**
+```json
+{
+  "success": true,
+  "results": [
+    {
+      "file": "notion-sync.md",
+      "path": "/path/to/pai-documentation/docs/02-capabilities/notion-sync.md",
+      "section": "Conflict Resolution",
+      "content": "KAY uses last-write-wins conflict resolution...",
+      "relevance": "0.89"
+    }
+  ],
+  "note": "These are excerpts from KAY's actual documentation stored in the database"
+}
+```
+
+---
+
+### query_kay_system
+
+**Purpose:** Query Oscar's live system state - get actual data from his running PAI
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `entity` | string | Yes | What to query (see enum below) |
+
+**Available Entities:**
+- `recent-syncs` - Last 20 sync runs with status, duration, errors
+- `sync-health` - 7-day sync health metrics by script
+- `sample-task` - A real task showing all fields and sync timestamps
+- `tasks-summary` - Task counts by status, priority, overdue
+- `files-summary` - PARA distribution, classification confidence
+- `telegram-stats` - Bot usage last 7 days
+- `database-schema` - All tables with sizes
+- `notion-databases` - Sync status for tasks/projects/notes
+- `calendar-summary` - Events 7 days back/forward
+- `llm-models` - Available models and pricing
+
+**Example:**
+```json
+{
+  "entity": "sample-task"
+}
+```
+
+**Returns:**
+```json
+{
+  "success": true,
+  "description": "A real task from KAY's database",
+  "data": {
+    "name": "Review deliverable",
+    "status": "To Do",
+    "priority": "High",
+    "due_at": "2026-02-07T10:00:00Z",
+    "notion_page_id": "abc-123-def",
+    "sql_local_last_edited_at": "2026-02-04T09:00:00Z",
+    "notion_last_edited_at": "2026-02-04T08:50:00Z",
+    "sql_updated_at": "2026-02-04T09:00:00Z"
+  },
+  "note": "Shows actual field structure, sync timestamps, Notion page ID format"
+}
+```
+
+---
+
+### get_kay_config
+
+**Purpose:** Get Oscar's actual configuration - cron schedules, sync settings, integrations
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `component` | string | Yes | Which config to retrieve (see enum below) |
+
+**Available Components:**
+- `cron-schedule` - All cron jobs (VPS + Railway + Telegram scheduler)
+- `sync-configuration` - Notion, Calendar, Git sync settings
+- `telegram-bot` - Features, commands, deployment info
+- `file-processing` - Pipeline stages, PARA structure, classification
+- `integrations` - All external services KAY uses
+
+**Example:**
+```json
+{
+  "component": "cron-schedule"
+}
+```
+
+**Returns:**
+```json
+{
+  "success": true,
+  "description": "KAY's cron automation schedule",
+  "vps_crons": [
+    {
+      "schedule": "*/15 * * * *",
+      "script": "sync-to-github.sh",
+      "description": "Git auto-sync"
+    }
+  ],
+  "railway_crons": [
+    {
+      "schedule": "*/10 * * * *",
+      "script": "cron-sync.ts",
+      "description": "Full sync cycle"
+    }
+  ]
+}
+```
+
+---
+
+### search_kay_memory
+
+**Purpose:** Search Oscar's MEMORY system - his accumulated learnings from previous sessions
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `topic` | string | No | Topic to search (e.g., "Notion sync", "file processing") |
+
+**Example:**
+```json
+{
+  "topic": "Notion conflict resolution"
+}
+```
+
+**Returns:**
+```json
+{
+  "description": "KAY's MEMORY structure",
+  "learnings_topics": [
+    "Environment",
+    "Infrastructure",
+    "Security",
+    "TypeScript",
+    "PAI"
+  ],
+  "note": "These are Oscar's accumulated learnings from previous sessions",
+  "suggestion": "Check ~/.claude/MEMORY/learnings/ for specific topics"
+}
+```
 
 ---
 
