@@ -201,7 +201,7 @@ I now want to extend it to match KAY's system (built by Oscar Wright). KAY is bu
 
 I'm giving you:
 1. This guide (KAY-EXTENSION-GUIDE.md)
-2. Link to full KAY documentation: [GitHub URL - to be added]
+2. Link to full KAY documentation: https://github.com/oscarelliswright-sys/pai-extension-guide
 
 Your purpose is to help me:
 1. Understand what KAY adds on top of base PAI
@@ -326,7 +326,7 @@ Let's begin!
 
 ## 📖 Full KAY Documentation Structure
 
-The complete documentation is available at: **[GitHub URL - to be added]**
+The complete documentation is available at: **https://github.com/oscarelliswright-sys/pai-extension-guide**
 
 ```
 pai-documentation/

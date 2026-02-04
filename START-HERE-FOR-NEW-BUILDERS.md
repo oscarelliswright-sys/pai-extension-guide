@@ -405,7 +405,7 @@ Let's begin with step 1.
 
 **Phase 3: Extend to KAY's Features**
 - Read `KAY-EXTENSION-GUIDE.md`
-- Use full documentation at: [GitHub link to be added]
+- Use full documentation at: https://github.com/oscarelliswright-sys/pai-extension-guide
 - Claude Code systematically replicates KAY's features
 - You make decisions where you want to deviate
 
@@ -426,7 +426,7 @@ Let's begin with step 1.
 - Official Bundles: https://github.com/danielmiessler/Personal_AI_Infrastructure/tree/main/Bundles/Official
 
 **KAY Documentation (Full System):**
-- GitHub: [To be added after you push to GitHub]
+- GitHub: https://github.com/oscarelliswright-sys/pai-extension-guide
 - Extension Guide: `KAY-EXTENSION-GUIDE.md`
 
 **Community:**
